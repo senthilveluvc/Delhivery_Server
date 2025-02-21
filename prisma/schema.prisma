@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Warehouse {
+  instanceId      String  @id
+  warehouse_name String?
+  uuid           String @default(uuid()) @unique @db.Uuid
+  email          String?
+  phone          String?
+  address        String?
+  city           String?
+  country        String?
+  pincode        String?
+  shipping_mode  String?
+}
+
+model Customer_shipment {
+  orderID        String  @id  // Primary Key
+  uuid           String  @default(uuid()) @unique @db.Uuid
+  customer_name  String?
+  address        String?
+  phone          String?
+  pincode        String?
+  payment_mode   String  @default("Prepaid")
+  shipment_mode  String?
+  length         Float?
+  height         Float?
+  weight         Float?
+  product_desc   String?
+  business_name  String?
+  waybill        String?
+  status         String? 
+  order_json     Json?    
+}
+
+
+
+
+
