@@ -49,7 +49,7 @@ async function createShipment(
 ) {
   const warehouse = await prisma.warehouse.findUnique({
     where: {
-      instanceId: "2d2091eb-e932-48cb-b964-875632831135",
+      instanceId: InstanceId,
     },
   });
 
@@ -212,11 +212,12 @@ async function createShipment(
       console.log("resp of order failed:", response.data);
 
       // Send WhatsApp Notification to Client on Failure
-      await sendShipmentFailureNotification(
-        refnum,
-        remarks,
-        formatPhoneNumber(contactDetails?.phone)
-      );
+      // await sendShipmentFailureNotification(
+      //   refnum,
+      //   remarks,
+      //   formatPhoneNumber(contactDetails?.phone),
+      //   InstanceId
+      // );
     } else {
       console.log("Shippment Created");
       console.log("resp of order:", response.data);
@@ -328,10 +329,10 @@ async function sendShipmentConfirmation(phoneNumber, name, orderId, waybill) {
 }
 
 // shipment creation failed notification-----
-async function sendShipmentFailureNotification(orderId, remarks, phoneNumber) {
+async function sendShipmentFailureNotification(orderId, remarks, phoneNumber, InstanceId) {
   const warehouse = await prisma.warehouse.findUnique({
     where: {
-      instanceId: "2d2091eb-e932-48cb-b964-875632831135",
+      instanceId: InstanceId,
     },
   });
 
@@ -362,10 +363,10 @@ async function sendShipmentFailureNotification(orderId, remarks, phoneNumber) {
 }
 
 // Non service notification------
-async function sendNonServiceableNotification(orderId, pincode, phone) {
+async function sendNonServiceableNotification(orderId, pincode, phone, InstanceId) {
   const warehouse = await prisma.warehouse.findUnique({
     where: {
-      instanceId: "2d2091eb-e932-48cb-b964-875632831135",
+      instanceId: InstanceId,
     },
   });
 
@@ -434,7 +435,7 @@ app.post("/webhook", express.text(), async (request, response) => {
     console.log("Instance ID---:", event.instanceId);
   } catch (err) {
     console.error(err);
-    response.status(400).send(`Webhook error: ${err.message}`);
+    response.status(500).send(`Webhook error: ${err.message}`);
     return;
   }
 
@@ -542,7 +543,8 @@ eventEmitter.on(
         await sendNonServiceableNotification(
           orderId,
           address.postalCode,
-          formatPhoneNumber(contactDetails?.phone)
+          formatPhoneNumber(contactDetails?.phone),
+          InstanceId
         );
         return;
       }
