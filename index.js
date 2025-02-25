@@ -212,12 +212,12 @@ async function createShipment(
       console.log("resp of order failed:", response.data);
 
       // Send WhatsApp Notification to Client on Failure
-      // await sendShipmentFailureNotification(
-      //   refnum,
-      //   remarks,
-      //   formatPhoneNumber(contactDetails?.phone),
-      //   InstanceId
-      // );
+      await sendShipmentFailureNotification(
+        refnum,
+        remarks,
+        formatPhoneNumber(contactDetails?.phone),
+        InstanceId
+      );
     } else {
       console.log("Shippment Created");
       console.log("resp of order:", response.data);
