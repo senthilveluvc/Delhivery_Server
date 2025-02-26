@@ -20,6 +20,18 @@ app.get("/", (req, res) => {
   res.send("Server is running!");
 });
 
+app.get("/test", (req, res) => {
+  const payload = {
+    PUBLIC_KEY: process.env.PUBLIC_KEY.replace(/\\n/g, "\n"),
+    apiKey: process.env.DELHIVERY_API_KEY,
+    authToken: process.env.AUTH_TOKEN,
+    siteId: process.env.WIXSITE_ID,
+    DATABASE_URL: process.env.DATABASE_URL,
+    PORT: process.env.PORT,
+  };
+
+  res.json(payload);
+});
 // check pincode serviceability------
 async function getServiceablePincodes(pincode) {
   try {
