@@ -16,6 +16,10 @@ const apiKey = process.env.DELHIVERY_API_KEY;
 const authToken = process.env.AUTH_TOKEN;
 const siteId = process.env.WIXSITE_ID;
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 // check pincode serviceability------
 async function getServiceablePincodes(pincode) {
   try {
